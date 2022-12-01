@@ -1,0 +1,1 @@
+function FindProxyForURL(url,host){if('{{condition}}'){return '{{proxy}}';}else{return "DIRECT";}}
