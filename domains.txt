@@ -1,0 +1,1 @@
+nordvpn,atlassian,jira,alfresco,code-with-me,circleci,signnow,openai
