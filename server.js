@@ -1,6 +1,12 @@
 const http = require(`http`);
 const fileReader = require(`fs`);
+const { execSync } = require("child_process");
 const port = 80;
+
+const filterFile = {
+    path: '../../etc/tinyproxy/filter',
+    encoding: 'utf8',
+}
 
 const pacTemplate = {
     path: 'pac.template.js',
@@ -103,11 +109,14 @@ setUpProxyDomains().then(() => {
                 if (Array.isArray(body)) {
                     try {
                         await writeFile(domainsFile.path, body.join(','));
+                        await writeFile(filterFile.path, body.join('\n'));
                         await setUpProxyDomains();
+                        execSync(`sudo systemctl restart tinyproxy`);
                         res.statusCode = 200;
                         res.end();
                         return;
                     } catch (ignore) {
+                        console.warn("error saving data: ", ignore);
                         res.statusCode = 500;
                     }
                 } else {
